@@ -5,8 +5,6 @@
 	"author": "kashmira-qeel",
 	"description": "Basic tools for setting up a new project.",
 	"factorio_version": "2.1",
-	"contact": "https://mods.factorio.com/mod/<mod name>/discussion",
-	"description": "Template for projects",
 	"dependencies" : [
 		"base"
 	]
