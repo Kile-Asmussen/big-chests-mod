@@ -1,0 +1,41 @@
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs =
+    {
+      nixpkgs,
+      flake-utils,
+      ...
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+      in
+      {
+        devShells.default =
+          with pkgs;
+          mkShell {
+            nativeBuildInputs = [ bashInteractive ];
+
+            shellHook = ''
+              # nix develop shells will by default overwrite the $SHELL variable with a
+              # non-interactive version of bash. The deviates from how nix-shell works.
+              # This fix was taken from:
+              #    https://discourse.nixos.org/t/interactive-bash-with-nix-develop-flake/15486
+              #
+              # See also: nixpkgs#5131 nixpkgs#6091
+              export SHELL=${pkgs.bashInteractive}/bin/bash
+            '';
+
+            packages = with pkgs; [
+              lua
+              jq
+            ];
+          };
+      }
+    );
+}
