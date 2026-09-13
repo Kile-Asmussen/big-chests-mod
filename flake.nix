@@ -32,6 +32,8 @@
             '';
 
             packages = with pkgs; [
+              lua
+              emmylua-rust-analyzer
               jq
             ];
           };
