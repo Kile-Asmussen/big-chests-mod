@@ -32,7 +32,6 @@
             '';
 
             packages = with pkgs; [
-              lua
               jq
             ];
           };
