@@ -7,7 +7,11 @@ NAME_VERSION="${NAME}_${VERSION}"
 
 function compile() {
     git add --all
-    git archive $(git stash create)  --worktree-attributes --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip
+    local STASH=$(git stash create)
+    if [[ -z $STASH ]]; then
+        STASH=HEAD
+    fi
+    git archive $STASH --worktree-attributes --prefix=$NAME_VERSION/ -o $NAME_VERSION.zip
     git gc --prune=now 2>/dev/null
 }
 
