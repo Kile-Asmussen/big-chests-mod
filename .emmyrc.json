@@ -7,12 +7,8 @@
   "workspace": {
     "enableReindex": false,
     "encoding": "utf-8",
-    "ignoreGlobs": [
-      "*.direnv*"
-    ],
-    "ignoreDir": [
-      "./.direnv"
-    ],
+    "ignoreDir": [],
+    "ignoreGlobs": [],
     "library": ["/home/qeela/factsandoreos"],
     "moduleMap": [],
     "packages": [],
