@@ -11,7 +11,7 @@
         "library": [
             "/home/qeela/.config/Code/User/workspaceStorage/4fc48d78ac86dccc427d9e1aad3c0c58/justarandomgeek.factoriomod-debug/emmylua/factorio/library",
             {
-                "path": "/usr/share/factorio",
+                "path": "/home/qeela/.steam/steam/steamapps/common/Factorio/data",
                 "ignoreDir": [
                     "core/lualib/event_handler.lua",
                     "core/lualib/crash-site.lua",
@@ -38,12 +38,6 @@
                     "*/menu-simulations/**"
                 ]
             }
-        ],
-        "ignoreGlobs": [
-            "*.direnv*"
-        ],
-        "ignoreDir": [
-            "./.direnv"
         ],
         "moduleMap": [
             {

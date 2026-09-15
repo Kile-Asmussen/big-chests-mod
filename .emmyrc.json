@@ -4,6 +4,22 @@
       "cast-type-mismatch"
     ]
   },
+  "workspace": {
+    "enableReindex": false,
+    "encoding": "utf-8",
+    "ignoreGlobs": [
+      "*.direnv*"
+    ],
+    "ignoreDir": [
+      "./.direnv"
+    ],
+    "library": ["/home/qeela/factsandoreos"],
+    "moduleMap": [],
+    "packages": [],
+    "preloadFileSize": 0,
+    "reindexDuration": 5000,
+    "workspaceRoots": []
+  },
   "doc": {
     "privateName": [],
     "syntax": "md"

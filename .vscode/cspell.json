@@ -1,3 +1,10 @@
 {
-    "ignorePaths": [".luarc.json"]
+    "ignorePaths": [
+        ".luarc.json"
+    ],
+    "words": [
+        "qeela",
+        "normalised",
+        "localisation",
+    ]
 }
