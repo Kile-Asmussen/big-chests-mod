@@ -1,4 +1,13 @@
 {
+    "files.watcherExclude": {
+        ".git/objects/**": true,
+        ".git/subtree-cache/**": true,
+        ".hg/store/**": true,
+        "*/.git/objects/**": true,
+        "*/.git/subtree-cache/**": true,
+        "*/.hg/store/**": true,
+        ".direnv/**": true
+    },
     "editor.inlayHints.enabled": "offUnlessPressed",
     "emmylua.ls.executablePath": "emmylua_ls",
     "emmylua.semanticTokens.renderDocumentationMarkup": true,

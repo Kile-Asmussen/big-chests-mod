@@ -1,0 +1,1 @@
+data.raw.inserter.inserter.rotation_speed = 10
