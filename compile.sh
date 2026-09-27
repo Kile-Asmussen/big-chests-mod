@@ -36,7 +36,8 @@ function clean() {
 }
 
 function uninstall() {
-    rm -rf ~/.factorio/mods/${NAME}_*
+    rm -rf ~/.factorio/mods/${NAME}_*.*.*
+    rm -rf ~/.factorio/mods/${NAME}
     exclude
 }
 
@@ -54,14 +55,14 @@ function install() {
 
 function link() {
     uninstall
-    mkdir -p ~/.factorio/mods/$NAME_VERSION/
+    mkdir -p ~/.factorio/mods/$NAME/
     for file in $(
         git ls-files \
         | git check-attr --stdin export-ignore \
         | rg -e '^([^:]+):.*unspecified' -r "\$1"
     ); do
-        mkdir -p $(dirname ~/.factorio/mods/$NAME_VERSION/$file)
-        ln ./$file ~/.factorio/mods/$NAME_VERSION/$file
+        mkdir -p $(dirname ~/.factorio/mods/$NAME/$file)
+        ln ./$file ~/.factorio/mods/$NAME/$file
     done
     include
 }

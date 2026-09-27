@@ -1,9 +1,9 @@
 {
-	"name": "--template--",
+	"name": "kashmiras-big-beautiful-chests",
 	"version": "0.1.0",
-	"title": "Template mod project",
+	"title": "Big Beautiful Chests",
 	"author": "kashmira-qeel",
-	"description": "Basic tools for setting up a new project.",
+	"description": "Now that Factorio 2.1 provides rotatable containers, who needs warehouses?",
 	"factorio_version": "2.1",
 	"dependencies" : [
 		"base"
