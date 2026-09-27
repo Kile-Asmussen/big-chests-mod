@@ -1,8 +1,6 @@
 ---@diagnostic disable: need-check-nil
 
-local normal_link_distance = 10.01
-local quality_distance_increase = 2.0
-
+local constants = require 'scripts.constants'
 local util = require 'util'
 local math2d = require 'math2d'
 
@@ -96,6 +94,8 @@ local function add_blinker(entity)
 
     local render = rendering.draw_sprite{
         sprite = "utility.cargo_bay_not_connected_icon",
+        x_scale = 0.5,
+        y_scale = 0.5,
         surface = entity.surface,
         target = entity,
         blink_interval = 30,
@@ -121,7 +121,7 @@ end
 local function link_cluster(start_entity, destroyed_id)
     local extenders, chests, min_quality = flood_fill_chest_cluster(start_entity, destroyed_id)
 
-    local max_dist = min_quality * quality_distance_increase + normal_link_distance
+    local max_dist = min_quality * constants.quality_distance_increase + constants.normal_link_distance + 0.01
 
     for _, extender in pairs(extenders) do
         local nearby_chest = nil
