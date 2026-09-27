@@ -19,6 +19,8 @@ big_chest.picture.filename = '__kashmiras-big-beautiful-chests__/graphics/big-ch
 lib.set_scale(big_chest.water_reflection, 2)
 lib.set_scale(big_chest_corpse.animation, 2)
 
+---@type 
+local big_chest_item
 
 data:extend{
     big_chest,
