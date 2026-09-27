@@ -1,8 +1,6 @@
 ---@diagnostic disable: need-check-nil
 
-local constants = require 'scripts.constants'
 local lib = require 'scripts.lib'
-local util = require 'util'
 
 ---@type data.ProxyContainerPrototype
 local big_extender = table.deepcopy(data.raw.container['kashmiras-big-chest']) --[[@as data.ProxyContainerPrototype]]
@@ -14,23 +12,6 @@ big_extender.subgroup = 'kashmiras-big-beautiful-chests'
 big_extender.picture.layers[1].filename = '__kashmiras-big-beautiful-chests__/graphics/big-extender.png'
 
 
----@type table<QualityID, LocalisedString>
-local quality_values = {}
-for _, quality in pairs(data.raw.quality) do
-    quality_values[quality.name] = tostring(constants.normal_link_distance + constants.quality_distance_increase * quality.level)
-end
-
----@type data.CustomTooltipField
-local connection_distance_tooltip = {
-    name = {'tooltip.kashmiras-big-extender-range'},
-    value = tostring(constants.normal_link_distance),
-    order = 255,
-    quality_value = quality_values,
-}
-
-big_extender.custom_tooltip_fields = {
-
-}
 
 local extender_item = table.deepcopy(data.raw.item['kashmiras-big-chest'])
 extender_item.name='kashmiras-big-extender'

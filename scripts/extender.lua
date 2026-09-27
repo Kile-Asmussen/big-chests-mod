@@ -1,13 +1,10 @@
 ---@diagnostic disable: need-check-nil
 
 local constants = require 'scripts.constants'
+local lib = require 'scripts.lib'
 local util = require 'util'
 local math2d = require 'math2d'
 
-local entity_filter = {
-    { filter = "name", name = "kashmiras-big-chest" },
-    { filter = "name", name = "kashmiras-big-extender" }
-}
 
 ---@param a MapPosition.struct
 ---@param b MapPosition.struct
@@ -16,6 +13,15 @@ local entity_filter = {
 local function manhattan_distance(a, b)
     return math.abs(a.x - b.x) + math.abs(a.y - b.y)
 end
+
+---@type CustomEntityStatus
+local unlinked_status = { diode = defines.entity_status_diode.red, label = { 'entity-status.kashmiras-extender-unlinked' } }
+
+---@type CustomEntityStatus
+local overloaded_status = { diode = defines.entity_status_diode.yellow, label = { 'entity-status.kashmiras-extender-overloaded' } }
+
+---@type CustomEntityStatus
+local overextended_status = { diode = defines.entity_status_diode.yellow, label = { 'entity-status.kashmiras-extender-overextended' } }
 
 ---@param entity LuaEntity
 ---@param exclude_ids table<integer, boolean>?
@@ -26,7 +32,7 @@ local function neighbors_of(entity, exclude_ids)
 
     local result = entity.surface.find_entities_filtered{
         position = entity.position,
-        radius = 1.51,
+        radius = 2.01,
         name = { "kashmiras-big-chest", "kashmiras-big-extender" },
     }
 
@@ -43,6 +49,9 @@ local function neighbors_of(entity, exclude_ids)
     return result
 end
 
+---@type fun(n:number, ...:number):number
+local quality_determiner = math[settings.startup['kashmira-quality-distance'].value]
+
 ---@param start_entity LuaEntity
 ---@param destroyed_id uint64?
 ---@return LuaEntity[], LuaEntity[], uint32
@@ -53,7 +62,7 @@ local function flood_fill_chest_cluster(start_entity, destroyed_id)
     local queue = { start_entity }
 
     ---@type uint32
-    local min_quality = start_entity.quality.level
+    local quality = start_entity.quality.level
 
     visited[start_entity.unit_number] = true
 
@@ -64,7 +73,7 @@ local function flood_fill_chest_cluster(start_entity, destroyed_id)
             goto continue
         end
 
-        min_quality = math.min(min_quality, current.quality.level)
+        quality = math.min(quality, current.quality.level)
 
         if current.name == "kashmiras-big-extender" then
             table.insert(extenders, current)
@@ -74,56 +83,25 @@ local function flood_fill_chest_cluster(start_entity, destroyed_id)
 
         for _, neighbor in pairs(neighbors_of(current, visited)) do
             visited[neighbor.unit_number] = true
-            min_quality =  math.min( min_quality, neighbor.quality.level)
+            quality = quality_determiner(quality, neighbor.quality.level)
             table.insert(queue, neighbor)
         end
 
         ::continue::
     end
 
-    return extenders, chests, min_quality
-end
-
----@type CustomEntityStatus
-local not_linked_status = { diode = defines.entity_status_diode.red, label = { 'entity-status.kashmiras-extender-unlinked' } }
-
----@param entity LuaEntity
-local function add_blinker(entity)
-    storage.blinkers = storage.blinkers or {}
-    if storage.blinkers[entity.unit_number] then return end
-
-    local render = rendering.draw_sprite{
-        sprite = "utility.cargo_bay_not_connected_icon",
-        x_scale = 0.5,
-        y_scale = 0.5,
-        surface = entity.surface,
-        target = entity,
-        blink_interval = 30,
-        sprite_param = {},
-        draw_sprite_param = {},
-        render_layer = "entity-info-icon"
-    }
-    storage.blinkers[entity.unit_number] = render.id
-end
-
----@param entity LuaEntity
-local function remove_blinker(entity)
-    storage.blinkers = storage.blinkers or {}
-    if storage.blinkers[entity.unit_number] then
-        local render = rendering.get_object_by_id(storage.blinkers[entity.unit_number])
-        if render then render.destroy() end
-        storage.blinkers[entity.unit_number] = nil
-    end
+    return extenders, chests, quality
 end
 
 ---@param start_entity LuaEntity
 ---@param destroyed_id uint64?
 local function link_cluster(start_entity, destroyed_id)
-    local extenders, chests, min_quality = flood_fill_chest_cluster(start_entity, destroyed_id)
+    local extenders, chests, quality = flood_fill_chest_cluster(start_entity, destroyed_id)
 
-    local max_dist = min_quality * constants.quality_distance_increase + constants.normal_link_distance + 0.01
+    local max_dist = quality * constants.quality_distance_increase + constants.normal_link_distance + 0.01
 
     for _, extender in pairs(extenders) do
+        ---@type LuaEntity?
         local nearby_chest = nil
         local nearby_count = 0
 
@@ -134,14 +112,23 @@ local function link_cluster(start_entity, destroyed_id)
             end
         end
 
+        extender.proxy_target_entity = nil
+        extender.proxy_target_inventory = nil
+
         if nearby_count == 1 then
             extender.custom_status = nil
             extender.proxy_target_entity = nearby_chest
-            remove_blinker(extender)
+            extender.proxy_target_inventory = defines.inventory.chest
+            lib.remove_blinker(extender)
+        elseif nearby_count > 1 then
+            extender.custom_status = overloaded_status
+            lib.add_blinker(extender, 'utility.no_path_icon')
+        elseif nearby_count == 0 and #chests > 1 then
+            extender.custom_status = overextended_status
+            lib.add_blinker(extender, 'utility.cargo_bay_too_far_from_source_icon')
         else
-            extender.custom_status = not_linked_status
-            extender.proxy_target_entity = nil
-            add_blinker(extender)
+            extender.custom_status = unlinked_status
+            lib.add_blinker(extender, 'utility.cargo_bay_not_connected_icon')
         end
     end
 end
@@ -155,6 +142,12 @@ end
 local function on_destroyed(event)
     link_cluster(event.entity, event.entity.unit_number)
 end
+
+
+local entity_filter = {
+    { filter = "name", name = "kashmiras-big-chest" },
+    {  filter = "name", name = "kashmiras-big-extender" }
+}
 
 script.on_event(defines.events.on_built_entity, on_built, entity_filter)
 script.on_event(defines.events.on_robot_built_entity, on_built, entity_filter)

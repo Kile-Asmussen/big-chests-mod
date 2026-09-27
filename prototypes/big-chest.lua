@@ -1,7 +1,7 @@
 ---@diagnostic disable: need-check-nil
 
+local constants = require 'scripts.constants'
 local lib = require 'scripts.lib'
-local util = require 'util'
 
 local big_chest = table.deepcopy(data.raw.container['steel-chest'])
 local big_chest_corpse = table.deepcopy(data.raw.corpse['steel-chest-remnants'])
@@ -20,6 +20,22 @@ big_chest.subgroup = 'kashmiras-big-beautiful-chests'
 
 big_chest.inventory_size = 96
 big_chest.inventory_type = 'with_filters_and_bar'
+
+---@type table<QualityID, LocalisedString>
+local quality_values = {}
+for _, quality in pairs(data.raw.quality) do
+    quality_values[quality.name] = tostring(constants.normal_link_distance + constants.quality_distance_increase * quality.level)
+end
+
+---@type data.CustomTooltipField
+local connection_distance_tooltip = {
+    name = {'tooltip.kashmiras-big-extender-range'},
+    value = tostring(constants.normal_link_distance),
+    order = 255,
+    quality_value = quality_values,
+}
+
+big_chest.custom_tooltip_fields = {connection_distance_tooltip}
 
 lib.map_shifts(big_chest.circuit_connector, function(c) return {c[1] + 0.5, c[2] + 0.5} end)
 lib.set_scale(big_chest.picture, 2)

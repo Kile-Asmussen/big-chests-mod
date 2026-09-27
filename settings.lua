@@ -1,2 +1,2 @@
 
-local set = {}
+require 'settings.quality-distance'

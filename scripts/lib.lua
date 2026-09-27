@@ -7,6 +7,52 @@ local lib = {}
 
 ---@alias GraphicsThingy data.CraftingMachineGraphicsSet|data.Animation4Way|data.WaterReflectionDefinition|data.Sprite|data.Sprite|data.SpriteVariations|data.Sprite4Way|data.SpriteSheet|data.SpriteNWaySheet|data.SpriteVariations|data.WorkingVisualisation|data.RotatedAnimation|GraphicsThingy[]
 
+function lib.show_floating_text(entity, text)
+    for _, player in pairs(game.players) do
+        if player.valid and player.surface == entity.surface then
+            player.create_local_flying_text{
+                text = text,
+                surface = entity.surface,
+                position = entity.position,
+                color = {1, 1, 1},
+            }
+        end
+    end
+end
+
+---@param entity LuaEntity
+---@param sprite string?
+function lib.add_blinker(entity, sprite)
+    storage.blinkers = storage.blinkers or {}
+    if storage.blinkers[entity.unit_number] then 
+        lib.remove_blinker(entity)
+    end
+
+    local render = rendering.draw_sprite{
+        sprite = sprite or "utility.warning_icon",
+        x_scale = 0.5,
+        y_scale = 0.5,
+        surface = entity.surface,
+        target = entity,
+        blink_interval = 30,
+        sprite_param = {},
+        draw_sprite_param = {},
+        render_layer = "entity-info-icon"
+    }
+    storage.blinkers[entity.unit_number] = render.id
+end
+
+---@param entity LuaEntity
+function lib.remove_blinker(entity)
+    storage.blinkers = storage.blinkers or {}
+    if storage.blinkers[entity.unit_number] then
+        local render = rendering.get_object_by_id(storage.blinkers[entity.unit_number])
+        if render then render.destroy() end
+        storage.blinkers[entity.unit_number] = nil
+    end
+end
+
+
 ---@param animation GraphicsThingy|nil
 ---@param scale number
 function lib.set_scale(animation, scale)
