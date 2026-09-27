@@ -8,7 +8,7 @@ local big_extender = table.deepcopy(data.raw.container['steel-chest'])
 
 big_extender.type = 'proxy-container'
 big_extender.name = 'kashmiras-big-extender'
-big_extender.corpse = 'kashmiras-big-extender-remnants'
+big_extender.corpse = 'kashmiras-big-chest-remnants'
 big_extender.minable.results = {{type='item', name='kashmiras-big-extender', amount=1}}
 
 big_extender.collision_box = {{-0.7,-0.7}, {0.7,0.7}}
