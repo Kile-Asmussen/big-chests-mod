@@ -18,7 +18,7 @@ Effectively, the Big chest extender lets you have chests of virtually any shape,
 Additional storage solutions are planned:
 
 - Long chests and wide chests and even bigger chests --- warehouses, basically
-- "Item tanks" that contain enormous amounts of just a single resource
+- "Item tanks" that contain enormous amounts of just a single item
 - A space platform hub access bay(?)
 
 ## Graphics attributions
