@@ -11,7 +11,7 @@ big_chest_corpse.name = 'kashmiras-big-chest-remnants'
 big_chest.corpse = 'kashmiras-big-chest-remnants'
 big_chest.minable.results = {{type='item', name='kashmiras-big-chest', amount=1}}
 
-big_chest.collision_box = {{-1,-1}, {1,1}}
+big_chest.collision_box = {{-0.7,-0.7}, {0.7,0.7}}
 big_chest.selection_box = {{-1,-1}, {1,1}}
 
 big_chest.localised_name = nil
@@ -30,6 +30,8 @@ big_chest.picture.layers[1].scale = 0.5
 big_chest.picture.layers[1].width = 136
 big_chest.picture.layers[1].height = 168
 big_chest.picture.layers[1].filename = '__kashmiras-big-beautiful-chests__/graphics/big-chest.png'
+
+lib.insert(big_chest.flags, "get-by-unit-number")
 
 local big_chest_item = table.deepcopy(data.raw.item['steel-chest'])
 big_chest_item.name='kashmiras-big-chest'

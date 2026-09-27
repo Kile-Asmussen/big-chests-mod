@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-type
 
 local math2d = require 'math2d'
 local util = require 'util'
