@@ -11,7 +11,7 @@ big_extender.minable.results = {{type='item', name='kashmiras-big-extender', amo
 big_extender.subgroup = 'kashmiras-big-beautiful-chests'
 big_extender.picture.layers[1].filename = '__kashmiras-big-beautiful-chests__/graphics/big-extender.png'
 
-
+big_extender.draw_inventory_content = false
 
 local extender_item = table.deepcopy(data.raw.item['kashmiras-big-chest'])
 extender_item.name='kashmiras-big-extender'

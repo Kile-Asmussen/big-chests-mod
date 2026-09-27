@@ -50,12 +50,16 @@ local function neighbors_of(entity, exclude_ids)
 end
 
 ---@type fun(n:number, ...:number):number
-local quality_determiner = math[settings.startup['kashmira-quality-distance'].value]
+local quality_determiner = math.min
+
+if settings.startup['kashmira-quality-distance'] then
+    quality_determiner = math[settings.startup['kashmira-quality-distance'].value]
+end
 
 ---@param start_entity LuaEntity
 ---@param destroyed_id uint64?
 ---@return LuaEntity[], LuaEntity[], uint32
-local function flood_fill_chest_cluster(start_entity, destroyed_id)
+local function map_out_chest_cluster(start_entity, destroyed_id)
     local visited = {}
     local extenders = {}
     local chests = {}
@@ -65,6 +69,9 @@ local function flood_fill_chest_cluster(start_entity, destroyed_id)
     local quality = start_entity.quality.level
 
     visited[start_entity.unit_number] = true
+    if destroyed_id then
+        visited[destroyed_id] = true
+    end
 
     while #queue > 0 do
         local current = table.remove(queue)
@@ -96,7 +103,7 @@ end
 ---@param start_entity LuaEntity
 ---@param destroyed_id uint64?
 local function link_cluster(start_entity, destroyed_id)
-    local extenders, chests, quality = flood_fill_chest_cluster(start_entity, destroyed_id)
+    local extenders, chests, quality = map_out_chest_cluster(start_entity, destroyed_id)
 
     local max_dist = quality * constants.quality_distance_increase + constants.normal_link_distance + 0.01
 
@@ -113,17 +120,16 @@ local function link_cluster(start_entity, destroyed_id)
         end
 
         extender.proxy_target_entity = nil
-        extender.proxy_target_inventory = nil
+        extender.proxy_target_inventory = defines.inventory.chest
 
         if nearby_count == 1 then
             extender.custom_status = nil
             extender.proxy_target_entity = nearby_chest
-            extender.proxy_target_inventory = defines.inventory.chest
             lib.remove_blinker(extender)
         elseif nearby_count > 1 then
             extender.custom_status = overloaded_status
             lib.add_blinker(extender, 'utility.no_path_icon')
-        elseif nearby_count == 0 and #chests > 1 then
+        elseif #chests > 0 then
             extender.custom_status = overextended_status
             lib.add_blinker(extender, 'utility.cargo_bay_too_far_from_source_icon')
         else
@@ -140,7 +146,10 @@ end
 
 ---@param event EventData.on_entity_died|EventData.on_player_mined_entity|EventData.on_robot_mined_entity|EventData.script_raised_destroy
 local function on_destroyed(event)
-    link_cluster(event.entity, event.entity.unit_number)
+    local neighbors = neighbors_of(event.entity, { [event.entity.unit_number] = true })
+    for _, neighbor in pairs(neighbors) do
+        link_cluster(neighbor, event.entity.unit_number)
+    end
 end
 
 

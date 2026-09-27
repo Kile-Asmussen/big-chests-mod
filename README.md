@@ -1,5 +1,13 @@
 
-# Template mod
+# Kashmira's Big Beautiful Chests
+
+This is a mod for those who love big chests.
+
+## Big chest extenders
+
+
+
+
 
 
 ## Attributions

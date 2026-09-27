@@ -21,7 +21,7 @@ big_chest.subgroup = 'kashmiras-big-beautiful-chests'
 big_chest.inventory_size = 96
 big_chest.inventory_type = 'with_filters_and_bar'
 
----@type table<QualityID, LocalisedString>
+---@type table<data.QualityID, data.LocalisedString>
 local quality_values = {}
 for _, quality in pairs(data.raw.quality) do
     quality_values[quality.name] = tostring(constants.normal_link_distance + constants.quality_distance_increase * quality.level)
@@ -30,9 +30,10 @@ end
 ---@type data.CustomTooltipField
 local connection_distance_tooltip = {
     name = {'tooltip.kashmiras-big-extender-range'},
-    value = tostring(constants.normal_link_distance),
+    value = {''},
     order = 255,
-    quality_value = quality_values,
+    quality_header = 'quality-tooltip.increases',
+    quality_values = quality_values,
 }
 
 big_chest.custom_tooltip_fields = {connection_distance_tooltip}
