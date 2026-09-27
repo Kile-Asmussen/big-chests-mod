@@ -87,7 +87,7 @@ local function flood_fill_chest_cluster(start_entity, destroyed_id)
 end
 
 ---@type CustomEntityStatus
-local not_linked_status = { diode = defines.entity_status_diode.red, label = { 'entity-status.extender-unlinked' } }
+local not_linked_status = { diode = defines.entity_status_diode.red, label = { 'entity-status.kashmiras-extender-unlinked' } }
 
 ---@param entity LuaEntity
 local function add_blinker(entity)

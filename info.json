@@ -1,9 +1,9 @@
 {
 	"name": "kashmiras-big-beautiful-chests",
 	"version": "0.1.0",
-	"title": "Big Beautiful Chests",
+	"title": "Kashmiras Big, Beautiful Chests",
 	"author": "kashmira-qeel",
-	"description": "Now that Factorio 2.1 provides rotatable containers, who needs warehouses?",
+	"description": "A collection of big, beautiful storage solutions",
 	"factorio_version": "2.1",
 	"dependencies" : [
 		"base"

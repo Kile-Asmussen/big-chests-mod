@@ -58,7 +58,7 @@ local big_chest_recipe = {
     results = {{type='item', name='kashmiras-big-chest', amount=1}}
 }
 
-lib.insert(data.raw.technology.logistics.effects, {type='unlock-recipe', recipe='kashmiras-big-chest'})
+lib.insert(data.raw.technology.automation.effects, {type='unlock-recipe', recipe='kashmiras-big-chest'})
 
 data:extend{
     big_chest,

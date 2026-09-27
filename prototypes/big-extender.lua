@@ -53,7 +53,7 @@ local extender_recipe = {
     results = {{type='item', name='kashmiras-big-extender', amount=1}}
 }
 
-lib.insert(data.raw.technology.logistics.effects, {type='unlock-recipe', recipe='kashmiras-big-extender'})
+lib.insert(data.raw.technology['automation-2'].effects, {type='unlock-recipe', recipe='kashmiras-big-extender'})
 
 data:extend{
     big_extender,
