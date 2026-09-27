@@ -68,9 +68,9 @@ local function flood_fill_chest_cluster(start_entity, destroyed_id)
 
         min_quality = math.min(min_quality, current.quality.level)
 
-        if current.name == "kashmiras-big-chest" then
+        if current.name == "kashmiras-big-extender" then
             table.insert(extenders, current)
-        elseif current.name == "kashmiras-big-extender" then
+        elseif current.name == "kashmiras-big-chest" then
             table.insert(chests, current)
         end
 
