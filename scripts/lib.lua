@@ -1,4 +1,7 @@
 
+local math2d = require 'math2d'
+local util = require 'util'
+
 local lib = {}
 
 ---@alias GraphicsThingy data.CraftingMachineGraphicsSet|data.Animation4Way|data.WaterReflectionDefinition|data.Sprite|data.Sprite|data.SpriteVariations|data.Sprite4Way|data.SpriteSheet|data.SpriteNWaySheet|data.SpriteVariations|data.WorkingVisualisation|data.RotatedAnimation|GraphicsThingy[]

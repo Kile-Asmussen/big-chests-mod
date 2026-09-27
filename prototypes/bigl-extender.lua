@@ -6,13 +6,13 @@ local util = require 'util'
 local big_chest = table.deepcopy(data.raw.container['steel-chest'])
 local big_chest_corpse = table.deepcopy(data.raw.corpse['steel-chest-remnants'])
 
-big_chest.name = 'kashmiras-big-chest'
+big_chest.name = 'kashmiras-big-extender'
 big_chest_corpse.name = 'kashmiras-big-chest-remnants'
 big_chest.corpse = 'kashmiras-big-chest-remnants'
 big_chest.minable.results = {{type='item', name='kashmiras-big-chest', amount=1}}
 
-big_chest.collision_box = {{-1,-1}, {1,1}}
-big_chest.selection_box = {{-1,-1}, {1,1}}
+big_chest.collision_box = {{-0.7,-0.7}, {0.7,0.7}}
+big_chest.selection_box = {{-0.7,-0.7}, {0.7,0.7}}
 
 big_chest.localised_name = nil
 

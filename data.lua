@@ -1,2 +1,3 @@
 
-require 'prototypes.big-st'
+require 'prototypes.item-subgroups'
+require 'prototypes.big-chest'
