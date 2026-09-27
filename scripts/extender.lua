@@ -49,7 +49,7 @@ local function neighbors_of(entity, exclude_ids)
     return result
 end
 
----@type fun(n:number, ...:number):number
+---@type fun(n:integer, ...:integer):integer
 local quality_determiner = math.min
 
 if settings.startup['kashmira-quality-distance'] then
