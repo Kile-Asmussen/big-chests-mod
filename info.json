@@ -4,6 +4,7 @@
 	"title": "Kashmiras Big, Beautiful Chests",
 	"author": "kashmira-qeel",
 	"description": "A collection of big, beautiful storage solutions",
+	"homepage": "https://github.com/Kile-Asmussen/big-chests-mod",
 	"factorio_version": "2.1",
 	"dependencies" : [
 		"base",
