@@ -118,7 +118,7 @@ function lib.insert(tbl, val, idx)
     if not idx then
         tbl --[[@as T[] ]] [#tbl+1]=val
     else
-        table.insert(tbl --[[@as table]], idx, value)
+        table.insert(tbl --[[@as table]], idx, val)
     end
 end
 

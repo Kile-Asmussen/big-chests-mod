@@ -89,7 +89,7 @@ local function map_out_chest_cluster(start_entity, destroyed_id, visited)
 
         for _, neighbor in pairs(neighbors_of(current, visited)) do
             visited[neighbor.unit_number] = true
-            quality = quality_determiner(quality, get_quality(neighbor))
+            quality = quality_determiner(quality, lib.get_quality(neighbor))
             table.insert(queue, neighbor)
         end
 

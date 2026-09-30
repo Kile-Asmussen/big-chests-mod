@@ -6,7 +6,7 @@ local count = {
     type = 'int-setting',
     name = 'kashmiras-platform-access-count',
     setting_type = 'startup',
-    default_value = 1,
+    default_value = 2,
     minimum_value = 1,
     order = 'b-a',
 }
@@ -19,7 +19,7 @@ if mods['quality'] then
         type = 'int-setting',
         name = 'kashmiras-platform-access-quality-boost',
         setting_type = 'startup',
-        default_value = 3,
+        default_value = 4,
         minimum_value = 1,
         order = 'b-a',
     }

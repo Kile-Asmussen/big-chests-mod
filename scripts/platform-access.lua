@@ -49,80 +49,86 @@ if settings.startup['kashmiras-platform-access-quality-boost'] then
     quality_boost = settings.startup['kashmiras-platform-access-quality-boost'].value --[[@as integer]]
 end
 
----@param event EventData.on_built_entity|EventData.on_robot_built_entity|EventData.script_raised_built|EventData.script_raised_revive|EventData.on_space_platform_mined_entity
-local function on_built(event)
+---@param index integer
+---@param access LuaEntity
+---@param hub LuaEntity?
+local function link(index, access, hub)
+    access.proxy_target_entity = nil
+    access.proxy_target_inventory = defines.inventory.chest
 
-    event.entity.proxy_target_entity = nil
-    event.entity.proxy_target_inventory = defines.inventory.chest
-
-    local space_platform = event.entity.surface.find_entities_filtered(space_platform_hub_filter)[1]
-
-    if not space_platform then
-        event.entity.custom_status = unlinked
-        lib.add_blinker(event.entity, 'utility.cargo_bay_not_connected_icon')
+    if not hub then
+        access.custom_status = unlinked
+        lib.add_blinker(access, 'utility.cargo_bay_not_connected_icon')
+        return
+    elseif
+        lib.chebyshev_distance(access.position, hub.position)
+        > access.force.max_cargo_bay_unloading_distance
+    then
+        access.custom_status = overextended
+        lib.add_blinker(access, 'utility.cargo_bay_too_far_from_source_icon')
         return
     end
 
-    storage.ports = storage.ports or {} 
-    storage.ports[event.entity.surface_index] = storage.ports[event.entity.surface_index] or {}
+    local relevant_quality = math.max(access.quality.level, hub.quality.level)
+    local max_ports = max_count + relevant_quality * quality_boost
 
-    ---@type table<integer, uint64[]>
-    local all_ports = storage.ports[event.entity.surface_index]
 
-    local this_quality = math.max(lib.get_quality(event.entity), lib.get_quality(space_platform))
+    if index > max_ports then
+        access.custom_status = overloaded
+        lib.add_blinker(access, 'utility.no_path_icon')
+    else
+        access.custom_status = nil
+        access.proxy_target_entity = hub
+        lib.remove_blinker(access)
+    end
+end
 
-    all_ports[this_quality] = all_ports[this_quality] or {}
+---@param surface LuaSurface
+---@param dead uint64?
+local function re_link_all(surface, dead)
 
-    table.insert(all_ports[this_quality], event.entity.unit_number)
+    local ports = surface.find_entities_filtered(platform_access_filter)
 
-    local ports_of_lesser_quality = 0
-
-    for quality, ports in pairs(all_ports) do
-        if quality <= this_quality then
-            ports_of_lesser_quality = ports_of_lesser_quality + #ports
+    if dead then
+        for i, port in pairs(ports) do
+            if port.unit_number == dead then table.remove(ports, i) break end
         end
     end
 
-    local max_ports = max_count + quality_boost * this_quality
+    local hub = surface.find_entities_filtered(space_platform_hub_filter)[1]
 
-    if ports_of_lesser_quality > max_ports then
-        event.entity.custom_status = overloaded
-        lib.add_blinker(event.entity, 'utility.no_path_icon')
-    elseif
-        lib.chebyshev_distance(event.entity.position, space_platform.position)
-        > event.entity.force.max_cargo_bay_unloading_distance
-    then
-        event.entity.custom_status = overextended
-        lib.add_blinker(event.entity, 'utility.cargo_bay_too_far_from_source_icon')
-    else
-        event.entity.custom_status = nil
-        event.entity.proxy_target_entity = space_platform
-        lib.remove_blinker(event.entity)
+    if not hub then
+        for _, port in pairs(ports) do
+            link(0, port, nil)
+        end
     end
+
+    table.sort(ports, function(ent1, ent2)
+        local q1 = lib.get_quality(ent1)
+        local q2 = lib.get_quality(ent2)
+
+        return q1 < q2 or (q1 == q2 and ent1.unit_number < ent2.unit_number) or false
+    end)
+
+    for i = 1,#ports do
+        link(i, ports[i], hub)
+    end
+end
+
+---@param event EventData.on_built_entity|EventData.on_robot_built_entity|EventData.script_raised_built|EventData.script_raised_revive|EventData.on_space_platform_mined_entity
+local function on_built(event)
+
+    re_link_all(event.entity.surface)
+
 end
 
 ---@param event EventData.on_entity_died|EventData.on_player_mined_entity|EventData.on_robot_mined_entity|EventData.script_raised_destroy|EventData.on_space_platform_built_entity
 local function on_destroyed(event)
 
-    if
-        storage.ports
-        and storage.ports[event.entity.surface_index]
-        and storage.ports[event.entity.surface_index][lib.get_quality(event.entity)]
-    then
-        local ports = storage.ports[event.entity.surface_index][lib.get_quality(event.entity)] --[[@as uint64[] ]]
-
-        util.remove_from_list(ports, event.entity.unit_number --[[@as uint64]])
-    end
+    re_link_all(event.entity.surface, event.entity.unit_number)
 
 end
 
----@param entity LuaEntity?
----@return boolean
-local function is_platform_access(entity)
-    if not entity then return false end
-
-    return entity.ghost_name == 'kashmiras-platform-access' or entity.name == 'kashmiras-platform-access'
-end
 
 
 ---@param event EventData.on_selected_entity_changed
@@ -133,7 +139,7 @@ local function mouseover(event)
 
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
-    local is = is_platform_access(player.selected) 
+    local is = player.selected and player.selected.name == 'kashmiras-platform-access' or false
     local hub = player.surface.find_entities_filtered(space_platform_hub_filter)[1]
 
     if rectangles[event.player_index] then
@@ -153,7 +159,7 @@ local function mouseover(event)
         players = { event.player_index },
         draw_on_ground = true,
         filled = true,
-        color = { 1, 1, 0, 0.5 },
+        color = { r=0.2, g=0.2, b=0.1, a=0.3 },
     }
 
     rectangles[event.player_index] = render.id

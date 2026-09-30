@@ -45,6 +45,7 @@ local max_ports_tooltip = {
 }
 
 for _, hub in pairs(data.raw['space-platform-hub']) do
+    hub.custom_tooltip_fields = hub.custom_tooltip_fields or {}
     lib.insert(hub.custom_tooltip_fields, max_ports_tooltip)
 end
 
@@ -85,6 +86,8 @@ local spap = {
         }
     },
 
+    build_grid_size = 2,
+
     flags = {
         'placeable-player',
         'placeable-neutral',
@@ -98,15 +101,15 @@ local spap = {
                 width = 538,
                 height = 532,
                 shift = { 0, 0 },
-                scale = 0.5,
+                scale = 0.25,
             },
             {
                 filename = '__kashmiras-big-beautiful-chests__/graphics/platform-access-shadow.png',
-                width = 368,
+                width = 363,
                 draw_as_shadow = true,
                 height = 238,
                 shift = { 0, 0 },
-                scale = 0.5,
+                scale = 0.25,
             }
         },
     }

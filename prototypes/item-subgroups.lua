@@ -9,7 +9,7 @@ local kashmiras_big_beautiful_chests = {
 
 data:extend{kashmiras_big_beautiful_chests}
 
-if not mods['space-age'] then
+if mods['space-age'] then
 
     local kashmiras_space_nonsense = {
         type = 'item-subgroup',
