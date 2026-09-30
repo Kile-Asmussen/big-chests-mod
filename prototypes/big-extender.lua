@@ -19,7 +19,12 @@ local extender_item = table.deepcopy(data.raw.item['kashmiras-big-chest'])
 extender_item.name='kashmiras-big-extender'
 extender_item.place_result = 'kashmiras-big-extender'
 extender_item.order = 'a-c'
-extender_item.icon = '__kashmiras-big-beautiful-chests__/graphics/icons/big-extender.png'
+extender_item.icon = nil
+extender_item.icons = {
+    { icon = '__kashmiras-big-beautiful-chests__/graphics/icons/big-chest.png', icon_size = 64, scale = 0.5 },
+    { icon = '__base__/graphics/icons/arrows/signal-rightwards-leftwards-arrow', icon_size = 64, scale = 0.25, shift = { -8, 8 } },
+}
+
 
 ---@type data.RecipePrototype
 local extender_recipe = {

@@ -46,7 +46,7 @@ lib.set_scale(big_chest_corpse.animation, 2)
 big_chest.picture.layers[1].scale = 0.5
 big_chest.picture.layers[1].width = 136
 big_chest.picture.layers[1].height = 168
-big_chest.picture.layers[1].filename = '__kashmiras-big-beautiful-chests__/graphics/big-chest.png'
+big_chest.picture.layers[1].filename = '__kashmiras-big-beautiful-chests__/graphics/big-chest-2.png'
 
 lib.insert(big_chest.flags, "get-by-unit-number")
 
