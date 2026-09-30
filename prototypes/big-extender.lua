@@ -9,7 +9,7 @@ big_extender.type = 'proxy-container'
 big_extender.name = 'kashmiras-big-extender'
 big_extender.minable.results = {{type='item', name='kashmiras-big-extender', amount=1}}
 big_extender.subgroup = 'kashmiras-big-beautiful-chests'
-big_extender.picture.layers[1].filename = '__kashmiras-big-beautiful-chests__/graphics/big-extender.png'
+big_extender.picture.layers[1].filename = '__kashmiras-big-beautiful-chests__/graphics/big-extender-2.png'
 
 big_extender.circuit_connector = big_extender.circuit_connector[1]
 
@@ -22,7 +22,7 @@ extender_item.order = 'a-c'
 extender_item.icon = nil
 extender_item.icons = {
     { icon = '__kashmiras-big-beautiful-chests__/graphics/icons/big-chest.png', icon_size = 64, scale = 0.5 },
-    { icon = '__base__/graphics/icons/arrows/signal-rightwards-leftwards-arrow', icon_size = 64, scale = 0.25, shift = { -8, 8 } },
+    { icon = '__base__/graphics/icons/arrows/signal-rightwards-leftwards-arrow.png', icon_size = 64, scale = 0.25, shift = { -8, 8 } },
 }
 
 

@@ -39,9 +39,19 @@ local space_platform_hub_connector = {
 
     circuit_wire_max_distance = 9,
 
-    circuit_connector = nil,
+    circuit_connector = circuit,
 
     draw_inventory_content = false,
+
+    selection_box = { { -2, -2 }, { 2, 2 } },
+    collision_box = { { -1.7, -1.7 }, { 1.7, 1.7 } },
+
+    surface_conditions = {
+      { property = 'gravity', max = 0 }
+    },
+
+    subgroup = 'kashmiras-space-nonsense',
+    order = 'a-a',
 
     picture = {
         layers = {
@@ -51,46 +61,22 @@ local space_platform_hub_connector = {
                 height = 532,
                 shift = { 0, 0 },
                 scale = 0.5,
-
+            },
+            {
+                filename = '__kashmiras-big-beautiful-chests__/graphics/platform-access-shadow.png',
+                width = 368,
+                draw_as_shadow = true,
+                height = 238,
+                shift = { 0, 0 },
+                scale = 0.5,
             }
-        }
+        },
     }
     
 }
 
---[[
-    {
-      "filename": "__base__/graphics/entity/linked-chest/linked-chest.png",
-      "priority": "extra-high",
-      "width": 66,
-      "height": 74,
-      "shift": [
-        0,
-        -0.0625
-      ],
-      "scale": 0.5,
-      "tint": [
-        0.8,
-        0.1,
-        0.3
-      ]
-    },
-    {
-      "filename": "__base__/graphics/entity/linked-chest/linked-chest-shadow.png",
-      "priority": "extra-high",
-      "width": 112,
-      "height": 46,
-      "shift": [
-        0.375,
-        0.140625
-      ],
-      "draw_as_shadow": true,
-      "scale": 0.5,
-      "tint": [
-        0.8,
-        0.1,
-        0.3
-      ]
-    }
+---@type data.ItemPrototype
+local space_platform_hub_connector_item = {
 
-]]
+
+}

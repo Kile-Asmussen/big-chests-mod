@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.10.0
+  Features:
+    - The Space Platform Access Port (SPAP) is a large space-platform-only structure that connects to the space platform hub's inventory through the construction infrastructure of the space platform foundation, and allows inserter access distant from the platform hub.
+  Modding:
+    - Added best-effort compatibility with mods that alter chest surface conditions (but forget ProxyContainers) in data-updates stage
+---------------------------------------------------------------------------------------------------
 Version: 0.9.1
   Other:
     - Added proper changelog
