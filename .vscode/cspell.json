@@ -3,12 +3,16 @@
         ".luarc.json"
     ],
     "words": [
+        "chebychev",
+        "chebyshev",
+        "idx",
         "kashmiras",
         "localisation",
         "localised",
         "modders",
         "normalised",
         "qeela",
+        "tbl",
         "Visualisation"
     ]
 }

@@ -23,8 +23,11 @@ end
 ---@param entity LuaEntity
 ---@param sprite string?
 function lib.add_blinker(entity, sprite)
-    storage.blinkers = storage.blinkers or {}
-    if storage.blinkers[entity.unit_number] then 
+
+    storage.blinkers = storage.blinkers or {} 
+    local blinkers = storage.blinkers --[[@as table<uint64, uint64>]]
+
+    if blinkers[entity.unit_number] then 
         lib.remove_blinker(entity)
     end
 
@@ -39,16 +42,18 @@ function lib.add_blinker(entity, sprite)
         draw_sprite_param = {},
         render_layer = "entity-info-icon"
     }
-    storage.blinkers[entity.unit_number] = render.id
+    blinkers[entity.unit_number] = render.id
 end
 
 ---@param entity LuaEntity
 function lib.remove_blinker(entity)
-    storage.blinkers = storage.blinkers or {}
-    if storage.blinkers[entity.unit_number] then
-        local render = rendering.get_object_by_id(storage.blinkers[entity.unit_number])
+    storage.blinkers = storage.blinkers or {} 
+    local blinkers = storage.blinkers --[[@as table<uint64, uint64>]]
+
+    if blinkers[entity.unit_number] then
+        local render = rendering.get_object_by_id(blinkers[entity.unit_number])
         if render then render.destroy() end
-        storage.blinkers[entity.unit_number] = nil
+        blinkers[entity.unit_number] = nil
     end
 end
 
@@ -108,8 +113,13 @@ end
 ---@generic T
 ---@param tbl T[]?
 ---@param val T
-function lib.insert(tbl, val)
-    tbl --[[@as T[] ]] [#tbl+1]=val
+---@param idx integer?
+function lib.insert(tbl, val, idx)
+    if not idx then
+        tbl --[[@as T[] ]] [#tbl+1]=val
+    else
+        table.insert(tbl --[[@as table]], idx, value)
+    end
 end
 
 ---@generic T
@@ -122,47 +132,32 @@ function lib.cut(tbl, len)
 end
 
 
----@param recipes { category: (data.RecipeCategoryID|data.RecipeCategoryID[]), replace?: (data.RecipeCategoryID|fun(data.RecipeCategoryID):boolean), [number]:data.RecipeID }
-function lib.add_recipe_category(recipes)
+---@param a MapPosition.struct
+---@param b MapPosition.struct
+---@return number
+---@overload fun(a:MapPosition,b:MapPosition):number
+function lib.manhattan_distance(a, b)
+    return math.abs(a.x - b.x) + math.abs(a.y - b.y)
+end
 
-    local category = recipes.category
-    local replace = recipes.replace
+---@param a MapPosition.struct
+---@param b MapPosition.struct
+---@return number
+---@overload fun(a:MapPosition,b:MapPosition):number
+function lib.chebyshev_distance(a, b)
+    return math.max(math.abs(a.x - b.x), math.abs(a.y - b.y))
+end
 
-    recipes.category = nil
-    recipes.replace = nil
-    ---@cast recipes data.RecipeID[]
 
-    if type(category) ~= 'table' then
-        category = { category }
-        ---@cast category data.RecipeCategoryID[]
-    end
-    
-    if type(replace) ~= 'function' then
-        replace = function(s) return s == replace end
-    end
+---@param entity LuaEntity
+---@return integer
+function lib.get_quality(entity)
+    return entity.quality.level
+end
 
-    for _, recipe_id in pairs(recipes) do
-        
-        local recipe = data.raw.recipe[recipe_id]
 
-        if not recipe then
-            error("no such recipe " .. recipe_id)
-        end
-
-        if not recipe.categories then
-            recipe.categories = {"crafting"}
-        end
-
-        for i=#recipe.categories,1,-1 do
-            if replace(recipe.categories[i]) then
-                table.remove(recipe.categories, i)
-            end
-        end
-
-        for i=1,#category do
-            table.insert(recipe.categories, category[i])
-        end
-    end
+if not (feature_flags or script.feature_flags).quality then
+    lib.get_quality = function(_) return 0 end
 end
 
 return lib

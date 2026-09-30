@@ -1,17 +1,6 @@
 ---@diagnostic disable: need-check-nil
 
 local lib = require 'scripts.lib'
-local util = require 'util'
-local math2d = require 'math2d'
-
-
----@param a MapPosition.struct
----@param b MapPosition.struct
----@return number
----@overload fun(a:MapPosition,b:MapPosition):number
-local function manhattan_distance(a, b)
-    return math.abs(a.x - b.x) + math.abs(a.y - b.y)
-end
 
 ---@type CustomEntityStatus
 local unlinked_status = { diode = defines.entity_status_diode.red, label = { 'entity-status.kashmiras-extender-unlinked' } }
@@ -31,7 +20,7 @@ local function neighbors_of(entity, exclude_ids)
 
     local result = entity.surface.find_entities_filtered{
         position = entity.position,
-        radius = 2.01,
+        radius = 2.245,
         name = { "kashmiras-big-chest", "kashmiras-big-extender" },
     }
 
@@ -39,7 +28,7 @@ local function neighbors_of(entity, exclude_ids)
         if 
             exclude_ids[result[i].unit_number]
             or result[i].unit_number == entity.unit_number
-            or manhattan_distance(result[i].position, entity.position) > 2
+            or lib.manhattan_distance(result[i].position, entity.position) > 2
         then
             table.remove(result, i)
         end
@@ -51,28 +40,19 @@ end
 ---@type fun(n:integer, ...:integer):integer
 local quality_determiner = math.min
 
-if settings.startup['kashmiras-quality-distance'] then
-    quality_determiner = math[settings.startup['kashmiras-quality-distance'].value]
+if settings.startup['kashmiras-big-extender-quality-determiner'] then
+    quality_determiner = math[settings.startup['kashmiras-big-extender-quality-determiner'].value]
 end
 
 ---@type integer
-local max_link_distance = settings.startup['kashmiras-extender-distance'].value --[[@as integer]]
+local max_link_distance = settings.startup['kashmiras-big-extender-distance'].value --[[@as integer]]
 
 local quality_boost = 0
 
-if settings.startup['kashmiras-quality-boost'] then
-    quality_boost = settings.startup['kashmiras-quality-boost'].value --[[@as integer]]
+if settings.startup['kashmiras-big-extender-quality-boost'] then
+    quality_boost = settings.startup['kashmiras-big-extender-quality-boost'].value --[[@as integer]]
 end
 
----@param entity LuaEntity
----@return integer
-local function get_quality(entity)
-    return entity.quality.level
-end
-
-if not feature_flags.quality then
-    get_quality = function(_) return 0 end
-end
 
 ---@param start_entity LuaEntity
 ---@param destroyed_id uint64?
@@ -85,7 +65,7 @@ local function map_out_chest_cluster(start_entity, destroyed_id, visited)
     local queue = { start_entity }
 
     ---@type uint32
-    local quality = get_quality(start_entity)
+    local quality = lib.get_quality(start_entity)
 
     visited[start_entity.unit_number] = true
     if destroyed_id then
@@ -119,6 +99,8 @@ local function map_out_chest_cluster(start_entity, destroyed_id, visited)
     return extenders, chests, quality
 end
 
+local default_0 = { __index = function(t, k) t[k] = 0 return 0 end }
+
 ---@param start_entity LuaEntity
 ---@param destroyed_id uint64?
 local function link_cluster(start_entity, destroyed_id)
@@ -132,7 +114,7 @@ local function link_cluster(start_entity, destroyed_id)
         local nearby_count = 0
 
         for _, chest in pairs(chests) do
-            if manhattan_distance(extender.position, chest.position) <= max_dist then
+            if lib.manhattan_distance(extender.position, chest.position) <= max_dist then
                 nearby_count = nearby_count + 1
                 nearby_chest = chest
             end

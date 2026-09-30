@@ -11,7 +11,9 @@ big_extender.minable.results = {{type='item', name='kashmiras-big-extender', amo
 big_extender.subgroup = 'kashmiras-big-beautiful-chests'
 big_extender.picture.layers[1].filename = '__kashmiras-big-beautiful-chests__/graphics/big-extender-2.png'
 
-big_extender.circuit_connector = big_extender.circuit_connector[1]
+if mods['base'] < '2.1.21' then
+    big_extender.circuit_connector = big_extender.circuit_connector[1]
+end
 
 big_extender.draw_inventory_content = false
 
@@ -24,7 +26,6 @@ extender_item.icons = {
     { icon = '__kashmiras-big-beautiful-chests__/graphics/icons/big-chest.png', icon_size = 64, scale = 0.5 },
     { icon = '__base__/graphics/icons/arrows/signal-rightwards-leftwards-arrow.png', icon_size = 64, scale = 0.25, shift = { -8, 8 } },
 }
-
 
 ---@type data.RecipePrototype
 local extender_recipe = {

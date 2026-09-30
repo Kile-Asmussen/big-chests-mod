@@ -1,6 +1,5 @@
 ---@diagnostic disable: need-check-nil
 
-local constants = require 'scripts.constants'
 local lib = require 'scripts.lib'
 
 local big_chest = table.deepcopy(data.raw.container['steel-chest'])
@@ -21,16 +20,32 @@ big_chest.subgroup = 'kashmiras-big-beautiful-chests'
 big_chest.inventory_size = 96
 big_chest.inventory_type = 'with_filters_and_bar'
 
----@type table<data.QualityID, data.LocalisedString>
-local quality_values = {}
-for _, quality in pairs(data.raw.quality) do
-    quality_values[quality.name] = tostring(constants.normal_link_distance + constants.quality_distance_increase * quality.level)
+
+---@type integer
+local max_link_distance = settings.startup['kashmiras-big-extender-distance'].value --[[@as integer]]
+
+local quality_boost = 0
+
+if settings.startup['kashmiras-big-extender-quality-boost'] then
+    quality_boost = settings.startup['kashmiras-big-extender-quality-boost'].value --[[@as integer]]
+end
+
+---@type table<data.QualityID, data.LocalisedString>?
+local quality_values = nil
+
+if feature_flags.quality then
+
+    quality_values = {}
+    for _, quality in pairs(data.raw.quality) do
+        quality_values[quality.name] = tostring(max_link_distance + quality_boost * quality.level)
+    end
+
 end
 
 ---@type data.CustomTooltipField
 local connection_distance_tooltip = {
     name = {'tooltip.kashmiras-big-extender-range'},
-    value = {''},
+    value = tostring(max_link_distance),
     order = 255,
     quality_header = 'quality-tooltip.increases',
     quality_values = quality_values,
@@ -47,8 +62,6 @@ big_chest.picture.layers[1].scale = 0.5
 big_chest.picture.layers[1].width = 136
 big_chest.picture.layers[1].height = 168
 big_chest.picture.layers[1].filename = '__kashmiras-big-beautiful-chests__/graphics/big-chest-2.png'
-
-lib.insert(big_chest.flags, "get-by-unit-number")
 
 local big_chest_item = table.deepcopy(data.raw.item['steel-chest'])
 big_chest_item.name='kashmiras-big-chest'
