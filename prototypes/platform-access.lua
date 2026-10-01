@@ -90,9 +90,6 @@ local spap = {
 
     custom_tooltip_fields = {max_ports_tooltip},
 
-    subgroup = 'kashmiras-space-nonsense',
-    order = 'a-a',
-
     minable = {
         mining_time = 0.5,
         results = {
@@ -136,8 +133,8 @@ local spap_item = table.deepcopy(data.raw.item['landing-pad-unloading-bay'])
 
 spap_item.name = 'kashmiras-platform-access'
 spap_item.icon = '__kashmiras-big-beautiful-chests__/graphics/icons/platform-access.png'
-spap_item.subgroup = spap.subgroup
-spap_item.order = spap.order
+spap_item.subgroup = 'space-related'
+spap_item.order = 'k[kashmira]-a'
 
 spap_item.place_result = 'kashmiras-platform-access'
 

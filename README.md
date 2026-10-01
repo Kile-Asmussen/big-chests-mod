@@ -9,7 +9,7 @@ This mod provides a big chest, 2×2 tiles, 96 inventory slots. Nothing new, exce
 
 ## Big chest extenders
 
-The revolutionary thing is the big chest extender — a chest that will connect to adjacent big chests and provide remote access to its inventory. It can, furthermore, connect _though_ other extenders!
+The revolutionary thing is the big chest extender — a chest that will connect to adjacent big chests and provide remote access to its inventory. It can, furthermore, connect _through_ other extenders!
 
 Effectively, the Big chest extender lets you have chests of virtually any shape, and they will complain about misconfiguration.
 
@@ -23,7 +23,7 @@ Very useful for your direct insertion orbital soup builds.
 
 Additional storage solutions are planned:
 
-- Long chests and wide chests and even bigger chests --- warehouses, basically
+- Long chests and wide chests and even bigger chests — warehouses, basically
 - "Item tanks" that contain enormous amounts of just a single item
 
 ## Graphics attributions
