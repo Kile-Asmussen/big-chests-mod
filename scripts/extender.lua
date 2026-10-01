@@ -30,7 +30,7 @@ local function neighbors_of(entity, exclude_ids)
         if 
             exclude_ids[result[i].unit_number]
             or result[i].unit_number == entity.unit_number
-            or lib.manhattan_distance(result[i].position, entity.position) > 2.01
+            or lib.manhattan_distance(result[i].position, entity.position) > 3.01
         then
             table.remove(result, i)
         end

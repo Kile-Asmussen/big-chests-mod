@@ -5,8 +5,12 @@ Version: 0.10.0
   Graphics:
     - Changed the appearance of big chest extenders to use a different sprite.
   Balancing:
-    - Effects of quality on the linking distance of chest extenders can now be modified in startup settings.
+    - Linking distance of chest extenders can now be modified in startup settings.
+      - Bonus distance from quality, also.
     - Chest extenders can now connect semi-diagonally, one tile off from orthogonal.
+    - SPAPs are limited to 2 per platform.
+      - Quality space platform hubs and quality SPAPs increase this number by 4 per quality level.
+      - These numbers can also be changed in settings.
   Modding:
     - Added best-effort compatibility with mods that alter chest surface conditions (but forget ProxyContainers) in data-updates stage
 ---------------------------------------------------------------------------------------------------
