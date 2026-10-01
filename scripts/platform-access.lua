@@ -1,5 +1,7 @@
 ---@diagnostic disable: need-check-nil
 
+local access = {}
+
 local lib = require 'scripts.lib'
 local util = require 'util'
 
@@ -16,7 +18,7 @@ local overextended =
  { diode = defines.entity_status_diode.yellow, label = { 'entity-status.kashmiras-platform-access-overextended' } }
 
 ---@type LuaPlatformBuiltEntityEventFilter[]
-local entity_filter = {{
+access.entity_filter = {{
     filter = 'name',
     name = 'kashmiras-platform-access'
 }}
@@ -34,7 +36,7 @@ local platform_access_filter = {
 }
 
 ---@param event EventData.on_surface_deleted
-local function cleanup(event)
+function access.surface_cleanup(event)
     if storage.ports then
         storage.ports[event.surface_index] = nil
     end
@@ -116,23 +118,19 @@ local function re_link_all(surface, dead)
 end
 
 ---@param event EventData.on_built_entity|EventData.on_robot_built_entity|EventData.script_raised_built|EventData.script_raised_revive|EventData.on_space_platform_mined_entity
-local function on_built(event)
-
+function access.on_built(event)
+    if event.entity.name ~= 'kashmiras-platform-access' then return end
     re_link_all(event.entity.surface)
-
 end
 
 ---@param event EventData.on_entity_died|EventData.on_player_mined_entity|EventData.on_robot_mined_entity|EventData.script_raised_destroy|EventData.on_space_platform_built_entity
-local function on_destroyed(event)
-
+function access.on_destroyed(event)
+    if event.entity.name ~= 'kashmiras-platform-access' then return end
     re_link_all(event.entity.surface, event.entity.unit_number)
-
 end
 
-
-
 ---@param event EventData.on_selected_entity_changed
-local function mouseover(event)
+function access.mouseover(event)
 
     storage.rectangles = storage.rectangles or {} 
     local rectangles = storage.rectangles --[[@as table<uint32, uint64>]]
@@ -163,24 +161,6 @@ local function mouseover(event)
     }
 
     rectangles[event.player_index] = render.id
-
 end
 
-script.on_event(defines.events.on_selected_entity_changed, mouseover)
-
-script.on_event(defines.events.on_space_platform_built_entity, on_built, entity_filter)
-script.on_event(defines.events.script_raised_built, on_built, entity_filter)
-script.on_event(defines.events.script_raised_revive, on_built, entity_filter)
-
-script.on_event(defines.events.on_space_platform_mined_entity, on_destroyed, entity_filter)
-script.on_event(defines.events.on_entity_died, on_destroyed, entity_filter)
-script.on_event(defines.events.script_raised_destroy, on_destroyed, entity_filter)
-
--- these shouldn't happen but we include them anyway
-script.on_event(defines.events.on_built_entity, on_built, entity_filter)
-script.on_event(defines.events.on_robot_built_entity, on_built, entity_filter)
-
-script.on_event(defines.events.on_player_mined_entity, on_destroyed, entity_filter)
-script.on_event(defines.events.on_robot_mined_entity, on_destroyed, entity_filter)
-
-script.on_event(defines.events.on_surface_deleted, cleanup)
+return access

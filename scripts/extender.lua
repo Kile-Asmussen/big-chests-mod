@@ -1,5 +1,7 @@
 ---@diagnostic disable: need-check-nil
 
+local extender = {}
+
 local lib = require 'scripts.lib'
 
 ---@type CustomEntityStatus
@@ -28,7 +30,7 @@ local function neighbors_of(entity, exclude_ids)
         if 
             exclude_ids[result[i].unit_number]
             or result[i].unit_number == entity.unit_number
-            or lib.manhattan_distance(result[i].position, entity.position) > 2
+            or lib.manhattan_distance(result[i].position, entity.position) > 2.01
         then
             table.remove(result, i)
         end
@@ -99,8 +101,6 @@ local function map_out_chest_cluster(start_entity, destroyed_id, visited)
     return extenders, chests, quality
 end
 
-local default_0 = { __index = function(t, k) t[k] = 0 return 0 end }
-
 ---@param start_entity LuaEntity
 ---@param destroyed_id uint64?
 local function link_cluster(start_entity, destroyed_id)
@@ -140,13 +140,20 @@ local function link_cluster(start_entity, destroyed_id)
     end
 end
 
+local names = {
+    ["kashmiras-big-chest"] = true,
+    ["kashmiras-big-extender"] = true,
+}
+
 ---@param event EventData.on_built_entity|EventData.on_robot_built_entity|EventData.script_raised_built|EventData.script_raised_revive|EventData.on_space_platform_mined_entity
-local function on_built(event)
+function extender.on_built(event)
+    if not names[event.entity.name] then return end
     link_cluster(event.entity)
 end
 
 ---@param event EventData.on_entity_died|EventData.on_player_mined_entity|EventData.on_robot_mined_entity|EventData.script_raised_destroy|EventData.on_space_platform_built_entity
-local function on_destroyed(event)
+function extender.on_destroyed(event)
+    if not names[event.entity.name] then return end
     local neighbors = neighbors_of(event.entity, { [event.entity.unit_number] = true })
     for _, neighbor in pairs(neighbors) do
         link_cluster(neighbor, event.entity.unit_number)
@@ -154,22 +161,9 @@ local function on_destroyed(event)
 end
 
 
-local entity_filter = {
+extender.entity_filter = {
     { filter = "name", name = "kashmiras-big-chest" },
     { filter = "name", name = "kashmiras-big-extender" }
 }
 
-script.on_event(defines.events.on_built_entity, on_built, entity_filter)
-script.on_event(defines.events.on_robot_built_entity, on_built, entity_filter)
-script.on_event(defines.events.script_raised_built, on_built, entity_filter)
-script.on_event(defines.events.script_raised_revive, on_built, entity_filter)
-
-
-script.on_event(defines.events.on_entity_died, on_destroyed, entity_filter)
-script.on_event(defines.events.on_player_mined_entity, on_destroyed, entity_filter)
-script.on_event(defines.events.on_robot_mined_entity, on_destroyed, entity_filter)
-script.on_event(defines.events.script_raised_destroy, on_destroyed, entity_filter)
-
--- shouldn't ever be called, but some mods make chests on space platforms a thing
-script.on_event(defines.events.on_space_platform_built_entity, on_built, entity_filter)
-script.on_event(defines.events.on_space_platform_mined_entity, on_destroyed, entity_filter)
+return extender
