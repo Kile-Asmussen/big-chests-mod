@@ -13,13 +13,18 @@ The revolutionary thing is the big chest extender — a chest that will connect 
 
 Effectively, the Big chest extender lets you have chests of virtually any shape, and they will complain about misconfiguration.
 
+## Space platform access ports
+
+Through the very logistical technology that allows space platforms to construct themselves, you can now access the contents of your space platform hub from (almost) anywhere on the platform surface, using the new space access platform port (SPAP).
+
+Very useful for your direct insertion orbital soup builds.
+
 ## More to come
 
 Additional storage solutions are planned:
 
 - Long chests and wide chests and even bigger chests --- warehouses, basically
 - "Item tanks" that contain enormous amounts of just a single item
-- A space platform hub access bay(?)
 
 ## Graphics attributions
 

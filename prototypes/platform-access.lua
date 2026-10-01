@@ -6,9 +6,35 @@ if not mods['space-age'] then return end
 
 local lib = require 'scripts.lib'
 
----@type data.CircuitConnectorDefinition?
-local circuit = table.deepcopy(data.raw.container['steel-chest'].circuit_connector[1])
-lib.map_shifts(circuit, function(c) return {c[1] + 1.5, c[2] + 1.0} end)
+local util = require 'util'
+
+local function both(x)
+    x.x = x[1]
+    x.y = x[2]
+    return x
+end
+
+---@type data.CircuitConnectorDefinition
+local circuit = {
+    points = {
+        shadow = {
+            red = both{ (455 - 538/2) / 128 + 0.5, (260 - 532/2) / 128 + 0.5 },
+            green = both{ (425 - 538/2) / 128 + 0.5, (280 - 532/2) / 128 + 0.5 },
+        },
+        wire = {
+            red = both{ (455 - 538/2) / 128, (260 - 532/2) / 128 },
+            green = both{ (425 - 538/2) / 128, (280 - 532/2) / 128 }
+        },
+        -- red = {
+        --     wire = both{ (455 - 538/2) / 128, (260 - 532/2) / 128 },
+        --     shadow = both{ (455 - 538/2) / 128 + 2.5, (260 - 532/2) / 128 + 2.5 },
+        -- },
+        -- green = {
+        --     wire = both{ (425 - 538/2) / 128, (280 - 532/2) / 128 },
+        --     shadow = both{ (425 - 538/2) / 128 + 2.5, (280 - 532/2) / 128 + 2.5 },
+        -- },
+    }
+}
 
 if mods['base'] >= '2.1.21' then
     circuit = { circuit, circuit, circuit, circuit }
@@ -59,7 +85,7 @@ local spap = {
 
     circuit_wire_max_distance = 9,
 
-    circuit_connector = { circuit, circuit, circuit, circuit},
+    circuit_connector = circuit,
 
     draw_inventory_content = false,
 
@@ -68,10 +94,6 @@ local spap = {
 
     surface_conditions = {
       { property = 'gravity', max = 0 }
-    },
-
-    tile_placeability_rules = {
-
     },
 
     custom_tooltip_fields = {max_ports_tooltip},
@@ -94,6 +116,8 @@ local spap = {
         'player-creation',
     },
 
+    max_health = 1000,
+
     picture = {
         layers = {
             {
@@ -108,8 +132,8 @@ local spap = {
                 width = 363,
                 draw_as_shadow = true,
                 height = 238,
-                shift = { 0, 0 },
-                scale = 0.25,
+                shift = { 2.3, 0.5 },
+                scale = 0.35,
             }
         },
     }
@@ -140,8 +164,26 @@ spap_recipe.results = {
     { type='item', name='kashmiras-platform-access', amount=1 },
 }
 
+data.raw.technology['landing-pad-unloading-bay'].localised_description = {'',
+    {'technology-description.landing-pad-unloading-bay'}, ' ',
+    {'technology-description.kashmiras-platform-access'}
+}
+
 lib.insert(data.raw.technology['landing-pad-unloading-bay'].effects,
-    { type='unlock-recipe', recipe='kashmiras-platform-access'}, 2
+    { type='unlock-recipe', recipe='kashmiras-platform-access'}
+)
+
+lib.insert(data.raw.technology['landing-pad-unloading-bay'].effects,
+    {
+        type='nothing', 
+        effect_description = { 'modifier-description.max-platform-access-distance', tostring(
+            data.raw.technology['landing-pad-unloading-bay'].effects[3].modifier
+        ) },
+        icons = {
+            { icon = '__core__/graphics/bonus-icon.png', icon_size = 32, scale = 1.0 },
+            { icon = '__core__/graphics/icons/technology/effect-constant/effect-constant-range.png', icon_size = 64, scale = 0.5  }
+        }
+    }
 )
 
 data:extend{spap, spap_item, spap_recipe}
