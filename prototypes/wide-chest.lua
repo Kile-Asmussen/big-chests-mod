@@ -15,7 +15,7 @@ wide_chest.picture = {
     north = {
         layers = {
             {
-                filename = '__kashmiras-big-chest__/graphics/tall-chest.png',
+                filename = '__kashmiras-big-beautiful-chests__/graphics/tall-chest.png',
                 priority = "extra-high",
                 width = 128,
                 height = 416,
@@ -35,13 +35,13 @@ wide_chest.picture = {
     east = {
         layers = {
             {
-                filename = '__kashmiras-big-chest__/graphics/tall-chest.png',
+                filename = '__kashmiras-big-beautiful-chests__/graphics/tall-chest.png',
                 width = 128,
                 height = 416,
                 scale = 0.5
             },
             {
-                filename = '__kashmiras-big-chest__/graphics/tall-chest-shadow.png',
+                filename = '__kashmiras-big-beautiful-chests__/graphics/tall-chest-shadow.png',
                 width = 110,
                 height = 138,
                 scale = 1.0,
