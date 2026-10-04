@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.11.1
   Graphics:
-    - Fixed up remnants of the various entities, so it doesn't look silly.
+    - Fixed up remnants of the various entities, so looks slightly less silly.
 ---------------------------------------------------------------------------------------------------
 Version: 0.11.0
   Features:

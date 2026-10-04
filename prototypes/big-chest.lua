@@ -6,7 +6,7 @@ local big_chest = table.deepcopy(data.raw.container['steel-chest'])
 
 big_chest.name = 'kashmiras-big-chest'
 big_chest.corpse = 'medium-small-remnants'
-big_chest.dying_explosion = data.raw["storage-tank"]["storage-tang"].dying_explosion
+big_chest.dying_explosion = data.raw["storage-tank"]["storage-tank"].dying_explosion
 big_chest.minable.results = {{type='item', name='kashmiras-big-chest', amount=1}}
 
 big_chest.collision_box = {{-0.7,-0.7}, {0.7,0.7}}
@@ -93,7 +93,6 @@ lib.insert(data.raw.technology['automation-2'].effects, {type='unlock-recipe', r
 
 data:extend{
     big_chest,
-    big_chest_corpse,
     big_chest_item,
     big_chest_recipe
 }

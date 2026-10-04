@@ -98,14 +98,11 @@ local wide_recipe = {
     ingredients = {{ type="item", name="steel-chest", amount = 6 }},
     results = {{ type='item', name=wide_item.name, amount = 1}}
 }
+lib.insert(data.raw.technology.railway.effects, { type='unlock-recipe', recipe=wide_recipe.name })
 
 local wide_chest_remnants = table.deepcopy(data.raw.corpse['steel-chest-remnants'])
 wide_chest_remnants.name = 'kashmiras-wide-chest-remnants'
 
-lib.insert(data.raw.technology.railway.effects, { type='unlock-recipe', recipe=wide_recipe.name })
+lib.set_scale(wide_chest_remnants.animation, 2)
 
-local wide_chest_corpse = table.deepcopy(data.raw.corpse['steel-chest-corpse'])
-
-lib.set_scale(wide_chest_corpse.animation, 2)
-
-data:extend{wide_chest, wide_item, wide_recipe, wide_chest_corpse}
+data:extend{wide_chest, wide_item, wide_recipe, wide_chest_remnants}
