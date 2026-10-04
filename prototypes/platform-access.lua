@@ -29,7 +29,7 @@ local circuit = {
 }
 
 if mods['base'] >= '2.1.21' then
-    circuit = { circuit, circuit, circuit, circuit }
+    circuit = { circuit }
 end
 
 
@@ -71,6 +71,9 @@ end
 local spap = {
     type = 'proxy-container',
     name = 'kashmiras-platform-access',
+
+    dying_explosion = data.raw['cargo-bay']['cargo-bay'].dying_explosion,
+    corpse = data.raw['cargo-bay']['cargo-bay'].corpse,
 
     icon = '__kashmiras-big-beautiful-chests__/graphics/icons/platform-access.png',
     icon_size = 64,

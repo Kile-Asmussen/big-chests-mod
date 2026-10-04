@@ -3,17 +3,19 @@
 local lib = require 'scripts.lib'
 
 local big_chest = table.deepcopy(data.raw.container['steel-chest'])
-local big_chest_corpse = table.deepcopy(data.raw.corpse['steel-chest-remnants'])
 
 big_chest.name = 'kashmiras-big-chest'
-big_chest_corpse.name = 'kashmiras-big-chest-remnants'
-big_chest.corpse = 'kashmiras-big-chest-remnants'
+big_chest.corpse = 'medium-small-remnants'
+big_chest.dying_explosion = data.raw["storage-tank"]["storage-tang"].dying_explosion
 big_chest.minable.results = {{type='item', name='kashmiras-big-chest', amount=1}}
 
 big_chest.collision_box = {{-0.7,-0.7}, {0.7,0.7}}
 big_chest.selection_box = {{-1,-1}, {1,1}}
 
 big_chest.localised_name = nil
+
+big_chest.icon = '__kashmiras-big-beautiful-chests__/graphics/icons/big-chest.png'
+big_chest.icon_size = 64
 
 big_chest.subgroup = 'kashmiras-big-beautiful-chests'
 
@@ -56,7 +58,6 @@ big_chest.custom_tooltip_fields = {connection_distance_tooltip}
 lib.map_shifts(big_chest.circuit_connector, function(c) return {c[1] + 0.5, c[2] + 0.5} end)
 lib.set_scale(big_chest.picture, 2)
 lib.set_scale(big_chest.water_reflection, 2)
-lib.set_scale(big_chest_corpse.animation, 2)
 
 big_chest.picture.layers[1].scale = 0.5
 big_chest.picture.layers[1].width = 136
