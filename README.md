@@ -19,12 +19,20 @@ Through the very logistical technology that allows space platforms to construct 
 
 Very useful for your direct insertion orbital soup builds.
 
+## Wide chests
+
+Just a big 'ol 2×6 steel box. Perfect for train stations if you don't wanna mess with big chests and extenders. No tricks and behind-the-scenes scripting magic, in Factorion 2.1 rotatable containers just work.
+
 ## More to come
 
-Additional storage solutions are planned:
+Better remnants and explosions! Currently that aspect of the graphics is lacking, but it won't be often that your storage solutions get blown up (hopefully.)
 
-- Long chests and wide chests and even bigger chests — warehouses, basically
-- "Item tanks" that contain enormous amounts of just a single item
+Additional storage solutions are under consideration:
+
+- "Pocket Wormhole," a container that link to nearby players' inventories allowing pseudo-personal logistics?
+- "Underground extender chests," that can connect to big chests/extenders at a set distance in one direction, using the upcoming rotatable proxy containers in 2.1.21.
+- "Item tanks," that contain enormous amounts of just a single item.
+- Logistics container variants of the big chest (usable with extenders.)
 
 ## Graphics attributions
 

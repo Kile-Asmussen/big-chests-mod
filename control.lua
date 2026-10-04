@@ -16,19 +16,18 @@ local function on_destroyed(event)
     access.on_destroyed(event)
 end
 
-script.on_event({defines.events.on_built_entity,
-defines.events.on_robot_built_entity,
-defines.events.on_space_platform_built_entity,
-defines.events.script_raised_built,
-defines.events.script_raised_revive},
-on_built, entity_filter)
+script.on_event(defines.events.on_built_entity,  on_built, entity_filter)
+script.on_event(defines.events.on_robot_built_entity,  on_built, entity_filter)
+script.on_event(defines.events.on_space_platform_built_entity,  on_built, entity_filter)
+script.on_event(defines.events.script_raised_built,  on_built, entity_filter)
+script.on_event(defines.events.script_raised_revive, on_built, entity_filter)
 
 
-script.on_event({defines.events.on_entity_died,
-defines.events.on_player_mined_entity,
-defines.events.on_space_platform_mined_entity,
-defines.events.on_robot_mined_entity,
-defines.events.script_raised_destroy}, on_destroyed, entity_filter)
+script.on_event(defines.events.on_entity_died, on_destroyed, entity_filter)
+script.on_event(defines.events.on_player_mined_entity, on_destroyed, entity_filter)
+script.on_event(defines.events.on_space_platform_mined_entity, on_destroyed, entity_filter)
+script.on_event(defines.events.on_robot_mined_entity, on_destroyed, entity_filter)
+script.on_event(defines.events.script_raised_destroy, on_destroyed, entity_filter)
 
 
 script.on_event(defines.events.on_selected_entity_changed, access.mouseover)
