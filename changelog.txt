@@ -2,6 +2,9 @@
 Version: 0.11.1
   Graphics:
     - Fixed up remnants of the various entities, so looks slightly less silly.
+    - Known bugs: water reflections are still borked.
+  Bugfixes:
+    - Added missing localisation strings.
 ---------------------------------------------------------------------------------------------------
 Version: 0.11.0
   Features:
