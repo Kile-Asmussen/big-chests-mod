@@ -130,7 +130,7 @@ function access.on_destroyed(event)
 end
 
 ---@param event EventData.on_player_changed_surface
-function access.player_changed_surface(event)
+function access.changed_surface(event)
     storage.rectangles = storage.rectangles or {}
     local rectangles = storage.rectangles --[[@as table<uint32, uint64>]]
 

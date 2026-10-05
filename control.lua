@@ -32,3 +32,4 @@ script.on_event(defines.events.script_raised_destroy, on_destroyed, entity_filte
 
 script.on_event(defines.events.on_selected_entity_changed, access.mouseover)
 script.on_event(defines.events.on_surface_deleted, access.surface_cleanup)
+script.on_event(defines.events.on_player_changed_surface, access.changed_surface)
