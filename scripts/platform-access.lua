@@ -129,38 +129,66 @@ function access.on_destroyed(event)
     re_link_all(event.entity.surface, event.entity.unit_number)
 end
 
----@param event EventData.on_selected_entity_changed
-function access.mouseover(event)
-
-    storage.rectangles = storage.rectangles or {} 
+---@param event EventData.on_player_changed_surface
+function access.player_changed_surface(event)
+    storage.rectangles = storage.rectangles or {}
     local rectangles = storage.rectangles --[[@as table<uint32, uint64>]]
 
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
-    local is = player.selected and player.selected.name == 'kashmiras-platform-access' or false
     local hub = player.surface.find_entities_filtered(space_platform_hub_filter)[1]
 
     if rectangles[event.player_index] then
+        
         local render = rendering.get_object_by_id(rectangles[event.player_index])
-        if render then render.destroy() end
+
+        if render then
+            render.destroy()
+        end
     end
 
-    if not is then return end
-    if not hub then return end
+    if hub then
 
-    local bonus = player.force.max_cargo_bay_unloading_distance
+        local bonus = player.force.max_cargo_bay_unloading_distance
 
-    local render = rendering.draw_rectangle{
-        surface = player.surface_index,
-        left_top = { hub.position.x - bonus, hub.position.y - bonus },
-        right_bottom = { hub.position.x + bonus, hub.position.y + bonus },
-        players = { event.player_index },
-        draw_on_ground = true,
-        filled = true,
-        color = { r=0.2, g=0.2, b=0.1, a=0.3 },
-    }
+        local render = rendering.draw_rectangle{
+            surface = player.surface_index,
+            left_top = { hub.position.x - bonus, hub.position.y - bonus },
+            right_bottom = { hub.position.x + bonus, hub.position.y + bonus },
+            players = { event.player_index },
+            visible = false,
+            draw_on_ground = true,
+            filled = true,
+            color = { r=0.2, g=0.2, b=0.1, a=0.3 },
+        }
 
-    rectangles[event.player_index] = render.id
+        if render then
+            rectangles[event.player_index] = render.id
+        end
+    end
+
+end
+
+---@param event EventData.on_selected_entity_changed
+function access.mouseover(event)
+    storage.rectangles = storage.rectangles or {}
+    local rectangles = storage.rectangles --[[@as table<uint32, uint64>]]
+
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
+
+    local render_id = rectangles[event.player_index]
+    if not render_id then return end
+
+    local render = rendering.get_object_by_id(render_id)
+    if not render then
+        rectangles[event.player_index] = nil
+    end
+
+    if player.selected and player.selected.name == 'kashmiras-platform-access' then
+        render.visible = true
+    else
+        render.visible = false
+    end
 end
 
 return access

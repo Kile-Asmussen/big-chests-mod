@@ -56,13 +56,13 @@ function install() {
 function link() {
     uninstall
     mkdir -p ~/.factorio/mods/$NAME/
-    for file in $(
+    (
         git ls-files \
         | git check-attr --stdin export-ignore \
         | rg -e '^([^:]+):.*unspecified' -r "\$1"
-    ); do
-        mkdir -p $(dirname ~/.factorio/mods/$NAME/$file)
-        ln ./$file ~/.factorio/mods/$NAME/$file
+    ) | while read file; do
+        mkdir -p $(dirname "$HOME/.factorio/mods/$NAME/$file")
+        ln "./$file" "$HOME/.factorio/mods/$NAME/$file"
     done
     include
 }
