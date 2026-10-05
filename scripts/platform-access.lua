@@ -35,12 +35,6 @@ local platform_access_filter = {
     name = 'kashmiras-platform-access',
 }
 
----@param event EventData.on_surface_deleted
-function access.surface_cleanup(event)
-    if storage.ports then
-        storage.ports[event.surface_index] = nil
-    end
-end
 
 ---@type integer
 local max_count = settings.startup['kashmiras-platform-access-count'].value --[[@as integer]]
@@ -129,23 +123,34 @@ function access.on_destroyed(event)
     re_link_all(event.entity.surface, event.entity.unit_number)
 end
 
+
+---@param event EventData.on_surface_deleted
+function access.surface_cleanup(event)
+    if storage.ports then
+        storage.ports[event.surface_index] = nil
+    end
+
+    if storage.access_port_range_viz then
+        for _, player_rects in pairs(storage.access_port_range_viz) do
+            player_rects[event.surface_index] = nil
+        end
+    end
+end
+
 ---@param event EventData.on_player_changed_surface
 function access.changed_surface(event)
-    storage.rectangles = storage.rectangles or {}
-    local rectangles = storage.rectangles --[[@as table<uint32, uint64>]]
+    storage.access_port_range_viz = storage.access_port_range_viz or {}
+    storage.access_port_range_viz[event.player_index] = storage.access_port_range_viz[event.player_index] or {}
+    
+    local access_port_range_viz = storage.access_port_range_viz[event.player_index] --[[@as table<uint64, uint64|boolean>]]
 
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
-    local hub = player.surface.find_entities_filtered(space_platform_hub_filter)[1]
-
-    if rectangles[event.player_index] then
-        
-        local render = rendering.get_object_by_id(rectangles[event.player_index])
-
-        if render then
-            render.destroy()
-        end
+    if access_port_range_viz[player.surface_index] ~= nil then
+        return
     end
+
+    local hub = player.surface.find_entities_filtered(space_platform_hub_filter)[1]
 
     if hub then
 
@@ -163,25 +168,30 @@ function access.changed_surface(event)
         }
 
         if render then
-            rectangles[event.player_index] = render.id
+            access_port_range_viz[player.surface_index] = render.id
         end
+    else
+        access_port_range_viz[player.surface_index] = false
     end
 
 end
 
 ---@param event EventData.on_selected_entity_changed
 function access.mouseover(event)
-    storage.rectangles = storage.rectangles or {}
-    local rectangles = storage.rectangles --[[@as table<uint32, uint64>]]
+    storage.access_port_range_viz = storage.access_port_range_viz or {}
+    storage.access_port_range_viz[event.player_index] = storage.access_port_range_viz[event.player_index] or {}
+
+    local access_port_range_viz = storage.access_port_range_viz[event.player_index] --[[@as table<uint32, uint64>]]
 
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
 
-    local render_id = rectangles[event.player_index]
+    local render_id = access_port_range_viz[player.surface_index]
     if not render_id then return end
 
     local render = rendering.get_object_by_id(render_id)
+    
     if not render then
-        rectangles[event.player_index] = nil
+        access_port_range_viz[player.surface_index] = nil
     end
 
     if player.selected and player.selected.name == 'kashmiras-platform-access' then
