@@ -141,7 +141,7 @@ end
 function access.changed_surface(event)
     storage.access_port_range_viz = storage.access_port_range_viz or {}
     storage.access_port_range_viz[event.player_index] = storage.access_port_range_viz[event.player_index] or {}
-    
+
     local access_port_range_viz = storage.access_port_range_viz[event.player_index] --[[@as table<uint64, uint64|boolean>]]
 
     local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
@@ -150,9 +150,9 @@ function access.changed_surface(event)
         return
     end
 
-    local hub = player.surface.find_entities_filtered(space_platform_hub_filter)[1]
+    if player.surface.platform then
 
-    if hub then
+        local hub = player.surface.platform.hub
 
         local bonus = player.force.max_cargo_bay_unloading_distance
 
@@ -170,10 +170,10 @@ function access.changed_surface(event)
         if render then
             access_port_range_viz[player.surface_index] = render.id
         end
+
     else
         access_port_range_viz[player.surface_index] = false
     end
-
 end
 
 ---@param event EventData.on_selected_entity_changed
