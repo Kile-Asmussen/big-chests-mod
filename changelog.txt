@@ -1,14 +1,16 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.11.1
   Graphics:
-    - Fixed up remnants of the various entities, so looks slightly less silly.
-    - Known bugs: water reflections are still borked.
+    - Fixed up remnants of the various entities, so it looks slightly less silly.
+    - Known bugs:
+      - water reflections are still borked.
+      - remnants are still not great, I'm too lazy to kitbash some better ones
   Bugfixes:
     - Added missing localisation strings.
 ---------------------------------------------------------------------------------------------------
 Version: 0.11.0
   Features:
-    - Added a simple wide/tall chest, 2×6, rotatable using the new Factorio 2.1 rotatability of containers.
+    - Added a simple wide/tall chest, 2×6, rotatable using the new Factorio 2.1 rotateability of containers.
 ---------------------------------------------------------------------------------------------------
 Version: 0.10.0
   Features:
