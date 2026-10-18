@@ -80,6 +80,7 @@ local big_chest_recipe = {
     name = 'kashmiras-big-chest',
     energy_required = 1,
     order = 'a',
+    enabled = false,
     subgroup = 'kashmiras-big-beautiful-chests',
     ingredients = {
         { type='item', name='steel-plate', amount=16 },

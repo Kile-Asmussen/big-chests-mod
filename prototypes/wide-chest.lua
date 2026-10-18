@@ -94,6 +94,7 @@ wide_item.order = wide_chest.order
 local wide_recipe = {
     type = 'recipe',
     name = wide_item.name,
+    enabled = false,
     energy_required = 2,
     ingredients = {{ type="item", name="steel-chest", amount = 6 }},
     results = {{ type='item', name=wide_item.name, amount = 1}}

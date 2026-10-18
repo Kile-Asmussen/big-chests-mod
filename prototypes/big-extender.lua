@@ -34,6 +34,7 @@ local extender_recipe = {
     type = 'recipe',
     name = 'kashmiras-big-extender',
     energy_required = 1,
+    enabled = false,
     order = 'a-c',
     subgroup = 'kashmiras-big-beautiful-chests',
     ingredients = {
