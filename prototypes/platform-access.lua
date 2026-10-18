@@ -80,6 +80,7 @@ local spap = {
 
     circuit_wire_max_distance = 9,
 
+    ---@diagnostic disable-next-line: assign-type-mismatch
     circuit_connector = circuit,
 
     draw_inventory_content = false,
